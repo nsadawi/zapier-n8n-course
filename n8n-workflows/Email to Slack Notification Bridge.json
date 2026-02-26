@@ -1,0 +1,93 @@
+{
+  "name": "Email to Slack Notification Bridge",
+  "nodes": [
+    {
+      "parameters": {
+        "pollTimes": {
+          "item": [
+            {
+              "mode": "everyX",
+              "value": 1,
+              "unit": "minutes"
+            }
+          ]
+        },
+        "simple": false,
+        "filters": {},
+        "options": {
+          "downloadAttachments": true
+        }
+      },
+      "id": "b8b92287-c81d-42bc-8960-ef76c221cb23",
+      "name": "When Email Received",
+      "type": "n8n-nodes-base.gmailTrigger",
+      "typeVersion": 1.3,
+      "position": [
+        256,
+        304
+      ],
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "SeTxtCZ9cbhpJWzy",
+          "name": "Gmail account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0AG6C99R45",
+          "mode": "list",
+          "cachedResultName": "noureddin-channel"
+        },
+        "text": "=New email from *{{ $json.from.name || $json.from.address }}*\n\n*Subject:* {{ $json.subject }}\n\n{{ $json.snippet }}",
+        "otherOptions": {}
+      },
+      "id": "660edd72-b625-47a5-bb20-c47a03293e90",
+      "name": "Send to Slack",
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        480,
+        304
+      ],
+      "webhookId": "b64a2783-99a3-4c48-aeb5-7e12c288e942",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "SHch1QFGBZvBKRl6",
+          "name": "Slack account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When Email Received": {
+      "main": [
+        [
+          {
+            "node": "Send to Slack",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "fc46701d-915a-4467-9a91-366869645582",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4e57a00c9a204988ab10b9d8b0aeae9766380f8ee7e2335d76252955b957f407"
+  },
+  "id": "5zdhYjUYIonfekzv",
+  "tags": []
+}

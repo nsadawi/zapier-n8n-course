@@ -1,0 +1,167 @@
+{
+  "name": "Simple-Slack-Worksflow",
+  "nodes": [
+    {
+      "parameters": {
+        "formTitle": "Request a meeting",
+        "formDescription": "Fill out this form to request a meeting, we'll get back to you.",
+        "formFields": {
+          "values": [
+            {
+              "fieldLabel": "Email",
+              "fieldType": "email",
+              "requiredField": true
+            },
+            {
+              "fieldLabel": "Preferred Date",
+              "fieldType": "date",
+              "requiredField": true
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.formTrigger",
+      "typeVersion": 2.5,
+      "position": [
+        0,
+        0
+      ],
+      "id": "9851de77-eea8-4a23-9eef-ce3e68d54882",
+      "name": "On form submission",
+      "webhookId": "f12c40b7-6efb-4a89-ae39-92047de8a74d"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.noOp",
+      "typeVersion": 1,
+      "position": [
+        384,
+        64
+      ],
+      "id": "15f86776-035d-44d7-822e-d484b380307e",
+      "name": "ToDo"
+    },
+    {
+      "parameters": {
+        "authentication": "oAuth2",
+        "select": "channel",
+        "channelId": {
+          "__rl": true,
+          "value": "C0AG6C99R45",
+          "mode": "list",
+          "cachedResultName": "noureddin-channel"
+        },
+        "text": "=A meeting within 10 days.\nEmail:{{ $json.Email }}\nPreferred Date: {{ $json['Preferred Date'] }}",
+        "otherOptions": {}
+      },
+      "type": "n8n-nodes-base.slack",
+      "typeVersion": 2.4,
+      "position": [
+        416,
+        -96
+      ],
+      "id": "30bee793-ad52-4308-ab26-54bd2e5bc4b8",
+      "name": "Send a message",
+      "webhookId": "b9f48d35-25b7-4287-9823-8064d35eb397",
+      "credentials": {
+        "slackOAuth2Api": {
+          "id": "SHch1QFGBZvBKRl6",
+          "name": "Slack account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 3
+          },
+          "conditions": [
+            {
+              "id": "22b9935b-270c-4ea2-9787-5215936c7761",
+              "leftValue": "={{ $json['Preferred Date'].toDateTime() }}",
+              "rightValue": "={{ $now.plus(10, 'days') }}",
+              "operator": {
+                "type": "dateTime",
+                "operation": "beforeOrEquals"
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.3,
+      "position": [
+        208,
+        0
+      ],
+      "id": "00c00b09-6e92-4d91-8970-585a6751c401",
+      "name": "Is within 7 days?"
+    }
+  ],
+  "pinData": {
+    "On form submission": [
+      {
+        "json": {
+          "Email": "n.sadawi@gmail.com",
+          "Preferred Date": "2026-02-28",
+          "submittedAt": "2026-02-20T22:21:01.700+00:00",
+          "formMode": "test"
+        },
+        "pairedItem": {
+          "item": 0
+        }
+      }
+    ]
+  },
+  "connections": {
+    "On form submission": {
+      "main": [
+        [
+          {
+            "node": "Is within 7 days?",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Is within 7 days?": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "ToDo",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "aa3bd450-0af3-4a7b-b0db-bc8279b8bc27",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4e57a00c9a204988ab10b9d8b0aeae9766380f8ee7e2335d76252955b957f407"
+  },
+  "id": "R9WzYTJCvP1cJ6OY",
+  "tags": []
+}

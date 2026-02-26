@@ -1,0 +1,92 @@
+{
+  "name": "HTTP Request Node",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "c8c22a3e-90bd-4e5e-af67-f6b809628324",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://catfact.ninja/fact",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "b53a75f3-668f-4972-9dd9-5550e353d7dd",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "sendTo": "n.sadawi@gmail.com",
+        "subject": "Cat Fact",
+        "emailType": "text",
+        "message": "=Here's a cat fact for you:  {{ $json.fact }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.gmail",
+      "typeVersion": 2.2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "fa4ae867-d4d5-4663-a754-dc302c265612",
+      "name": "Send a message",
+      "webhookId": "2d9ab47a-6425-4523-802c-375278f008c7",
+      "credentials": {
+        "gmailOAuth2": {
+          "id": "SeTxtCZ9cbhpJWzy",
+          "name": "Gmail account"
+        }
+      }
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Send a message",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "238b9893-73a4-43cf-b3c5-b2fe7d3df788",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4e57a00c9a204988ab10b9d8b0aeae9766380f8ee7e2335d76252955b957f407"
+  },
+  "id": "Nj18oOo9tuxzmhlN",
+  "tags": []
+}

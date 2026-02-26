@@ -1,0 +1,81 @@
+{
+  "name": "HTTP Request Node + Code Node",
+  "nodes": [
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.manualTrigger",
+      "typeVersion": 1,
+      "position": [
+        0,
+        0
+      ],
+      "id": "f8c17506-4a39-496c-bf65-0ae27af44038",
+      "name": "When clicking ‘Execute workflow’"
+    },
+    {
+      "parameters": {
+        "url": "https://catfact.ninja/fact",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.4,
+      "position": [
+        208,
+        0
+      ],
+      "id": "90f7b5e0-a275-43a0-a7af-a363ef23fd16",
+      "name": "HTTP Request"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Access the text from the fact field\nconst factText = $input.first().json.fact;\n\n// Use a regular expression to find all instances of \"cat\" (case-insensitive)\n// The 'g' flag finds all matches, and the 'i' flag makes it case-insensitive\nconst matches = factText.match(/cat/gi);\n\n// Get the count (handle null if no matches are found)\nconst count = matches ? matches.length : 0;\n\nconsole.log(`The word \"cat\" appears ${count} times.`);\n\n\nreturn {count};"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        416,
+        0
+      ],
+      "id": "976408b1-5a2c-4e6c-9304-e7eb7d36d11d",
+      "name": "Code in JavaScript"
+    }
+  ],
+  "pinData": {},
+  "connections": {
+    "When clicking ‘Execute workflow’": {
+      "main": [
+        [
+          {
+            "node": "HTTP Request",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "HTTP Request": {
+      "main": [
+        [
+          {
+            "node": "Code in JavaScript",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1",
+    "binaryMode": "separate",
+    "availableInMCP": false
+  },
+  "versionId": "32f7c5bd-cf8e-4c95-9311-978cc0492dbc",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "4e57a00c9a204988ab10b9d8b0aeae9766380f8ee7e2335d76252955b957f407"
+  },
+  "id": "1b7yJPoKq1wQpkKU",
+  "tags": []
+}
